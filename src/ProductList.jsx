@@ -252,6 +252,10 @@ function ProductList({ onHomeClick }) {
         e.preventDefault();
         setShowCart(false);
     };
+     const handleAddToCart = (plant) => {
+        // dispatch(addItem(plant)); // Uncomment if using Redux
+        setAddedToCart((prev) => ({ ...prev, [plant.name]: true }));
+    };
     return (
         <div>
             <div className="navbar" style={styleObj}>
@@ -273,7 +277,22 @@ function ProductList({ onHomeClick }) {
                 </div>
             </div>
             {!showCart ? (
-                <div className="product-grid">
+            <div className="product-grid">
+                    {plantsArray.flatMap(category =>
+                        category.plants.map(plant => (
+                            <div key={plant.name} className="product-card">
+                                <img src={plant.image} alt={plant.name} className="product-image" />
+                                <h3>{plant.name}</h3>
+                                <p>{plant.description}</p>
+                                <p className="product-cost">{plant.cost}</p>
+                                <button
+                                    onClick={() => handleAddToCart(plant)}
+                                    disabled={addedToCart[plant.name]}
+                                >
+                                    {addedToCart[plant.name] ? "Added" : "Add to Cart"}
+                                </button>
+                            </div>    
+      ))) }
 
 
                 </div>
@@ -285,31 +304,6 @@ function ProductList({ onHomeClick }) {
 }
 
 
- const [addedToCart, setAddedToCart] = useState({});
-
-  const handleAddToCart = (plant) => {
-    dispatch(addItem(plant)); // send to global Redux store
-    setAddedToCart((prev) => ({ ...prev, [plant.id]: true }));
-  };
-{
-  return (
-    <div className="product-grid">
-      {plantsArray.map((plant) => (
-        <div key={plant.id} className="product-card">
-          <img src={plant.image} alt={plant.name} className="product-image" />
-          <h3>{plant.name}</h3>
-          <p>{plant.description}</p>
-          <p className="product-cost">${plant.cost.toFixed(2)}</p>
-          <button
-            onClick={() => handleAddToCart(plant)}
-            disabled={addedToCart[plant.id]}
-          >
-            {addedToCart[plant.id] ? "Added" : "Add to Cart"}
-          </button>
-        </div>
-      ))}
-    </div>
-  );
-};
+ 
 
 export default ProductList;
