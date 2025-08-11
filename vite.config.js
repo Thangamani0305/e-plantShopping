@@ -5,4 +5,11 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   base: "/shoppingreact",
   plugins: [react()],
+  build: {
+    rollupOptions: {},
+  },
+  preview: {
+    port: 4173,
+    host: true,
+  },
 })
